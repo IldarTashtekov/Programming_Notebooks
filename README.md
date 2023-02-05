@@ -1,2 +1,2 @@
 # Programming_Notebooks
-Notebooks of diferent courses and 
+Notebooks of diferent courses and personal studies 
