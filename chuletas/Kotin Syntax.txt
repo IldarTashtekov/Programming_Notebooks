@@ -1,0 +1,279 @@
+println() //printar
+
+---VARIABLES----
+
+var dinero:Int=10 //mas redundante 
+var dinero=10 //menos redundante
+
+val cinco = 5 //constante declarada en ejecucion
+const val pi=3.14 //consante declarada en compilacion
+
+
+    val boolean : Boolean = true
+    val Long:Long = 3L
+    val double : Double = 2.7182
+    val float : Float = 1.1f
+    val char= 'a'
+    val String="OwO"
+
+
+
+
+---OPERACIONES ARITMETICAS---
+
+En Kotlin las operaciones son traducidas a funciones interiormente por el compilador. 
+La operación val tercerValor = primerValor + segundoValor 
+es lo mismo que decir tercerValor = primerValor.plus(segundoValor).
+
+
+
+Expresion	Funcion		Operator Fun
+
+a + b		c = a + b	public operator fun plus(other: Int): Int
+a - b		c = a - b	public operator fun minus(other: Int): Int
+a * b		c = a * b	public operator fun times(other: Int): Int
+a / b		a = a / b	public operator fun div(other: Int): Int
+a % b		c = a % b	public operator fun rem(other: Int): Int
+a++		c = a++		public operator fun inc(): Int
+a–		c = a–		public operator fun dec(): Int
+a > b		c = a > b	public override operator fun compareTo(other: Int): Int
+a < b		c = a < b	public override operator fun compareTo(other: Int): Int
+a >= b		c = a >= b	public override operator fun compareTo(other: Int): Int
+a <= b		c = a <= b	public override operator fun compareTo(other: Int): Int
+a != b		c = a != b	public open operator fun equals(other: Any?): Boolean
+
+
+
+
+---CONDITIONALS---
+//IF
+
+if(variable.isNotEmpty()){
+
+	println("la variable no esta vacia")				
+}else if(variable==x){
+
+	println("oh vaya k loco")	
+}else{
+
+	println("la variable esta vacia lol")
+}
+
+
+
+--WHEN(SWITCH)--
+
+when(number){
+	1->{
+		//opcion1
+	}
+	2->{
+		//opcion2
+	}
+	3->{
+		//opcion3
+	}
+	else->{
+		//default
+	}
+}
+
+
+
+
+---LOOPS---
+
+	while(){ //while loop
+  
+	}
+
+
+
+	do{     //do while loop
+
+	}while()
+
+
+	for(fruta in listaDeFrutas){ //for loop
+		println("voy a comerme una $fruta")
+	}
+	
+  	listaDeFrutas.forEach{fruta->println("voy a comerme una $fruta")} //for each
+
+
+
+
+---COLLECTIONS, DATA STRUCTURES---
+
+//LISTS
+val listaDeNombres=listOf<Type>(a,b,c,d,e)
+listaDeNombres.first()		//devuelve [0]
+listaDeNombres.firstOrNull()   //si la posicion esta vacia devuelve "" o 0
+
+val listaVacia = mutableListOf<Type>() //lista mutable
+listaVacia.add(a) 		      //add function 
+listaVacia.get(pos)		     //get function
+listaVacia[pos]			    //get indexado
+listaVacia.removeAt(pos)	   //elimina posicion	
+listaVacia.removeIf{logica}	  //elimina si se cumple logica del if
+
+.sorted() 			   	    //ordena lista
+.sortedDescending      		  	   //ordena descendiente
+.sortedBy{numero -> numero<50}   	  //si el mumero es mayor de 50 va al final si es menor al principio
+.shuffled()				 //desordena los numeros
+.reversed()		       		//ordena en inverso
+.map{numero -> "tu numero es $numero"} //transforma en un string
+.filter{numero->numero>50}	      //solo devuelve numeros filtrados
+
+//ARRAY
+val myArray=arrayOf(1,2,3,4)   //array en kotlin
+
+//MAPS
+var ciudadPais=mapOf( //maps inmutable
+	"Paris" to "France",
+	"Madrid" to "Spain",
+	"London" to "UK"	
+)
+var ciudadPais=mutableMapOf(blabla)//maps mutable
+
+ciudadPais.put("Berlin","Germany") //añadir
+ciudadPais.remove(key:"Berlin")   //eliminar
+
+println(ciudadPais.keys)//muestra las llaves
+println(ciudadPais.values) //muestra valores
+
+//SETS
+val vocalesRepetidas=setOf('a','e','y','o','u','e','i') //las repetidas desapareceran
+		
+mutableSetOf() //mutable
+
+.add(elemento)
+.remove(elemento) //no puedes poner posicion o key, solo el value
+
+
+---FUNCIONES----
+
+fun main(args:<Array>String){} //funcion main
+
+
+fun nombre(nombreParametro:tipo, nombreParametro:tipo):tipo{  //estructura basica
+	
+	return tipo
+}
+
+
+.random()
+
+
+//String funtions
+.toUpperCase
+.toLowerCase
+
+//LAMBDA FUNCTIONS
+val myLambda:(tipoEntrada)->tipoRetorno={valor->valor.length}//funcion lambda que calcula el length de un string
+
+
+//HIGH ORDER FUNCTIONS
+funciones que reciben funciones como paramentro y puedes devolver funciones muy locoenfin
+
+
+---SCOPE FUNCTIONS---//realizas funciones de forma mas dinamica
+//LET FUNCTION nos permite ejecutar el codigo cuando una variable nullable no sea nula
+var nombre:String="Guiseppe"
+nombre?.Let{
+	valor->println(el nombre no es nulo es $valor)
+}
+
+//WITH FUNCTION
+fun main(args:Array<String>){
+    val colores = listOf("Azul","Amarillo","Rojo")
+    with(colores){
+        //Nos permite acceder a las propeidades de colores sin necesidad de llamar a la variable
+        println("Nuestros colores son $this")
+        println("Cantidad de colores $size")
+    }
+}
+
+//RUN FUNCTION run ejecuta una serie de operaciones despues de declarar una variable
+
+fun main(args: Array<String>){
+    val moviles = mutableListOf("Samsung A50","Samsung A51","Samsung A52")
+            .run{
+                removeIf{ movil->movil.contains("A50") }//en este caso despues de declarar la lista, en el run se elimina el modelo A50
+                this
+            }
+    println(moviles)
+}
+
+
+//APPLY FUNCTION es como el run pero no hace falta devolver this al final, ademas no permite cambiar propiedades sin valor evitando nullPoinerExeptions
+
+fun main(args: Array<String>){
+    //apply devuelve el valor de forma automatica
+    //se puede crear una funcion apply segura
+    val moviles = mutableListOf("Samsung A50","Samsung A51","Samsung A52")
+            .apply {
+                removeIf{movil -> movil.contains("A50")}
+            }
+    println(moviles)
+
+    var colores : MutableList<String>? = null
+    colores?.apply {
+        //no lo corre porque es nulo
+        println("Colores $this")
+        println("Cantidad $size")
+    }
+
+    val colores2 : MutableList<String> = mutableListOf("Amarillo","Azul","Rojo")
+    colores2?.apply {
+        //no lo corre porque es nulo
+        println("Colores $this")
+        println("Cantidad $size")
+    }
+}
+
+
+//ALSO , obtienes una variables, ejecutar un codigo con esa variable y luego devolverla como parametro para ser usada para una funcion
+ 
+   // also -> Allow us to obtain a variable then execute a code with that variable an return it to be use
+    val appleDevices = mutableListOf("Apple Watch", "iMac", "iPhone", "HomePod", "Airpods", "iPad", "iPod", "MacBook")
+        .also { list -> println("the original value of the list is $list") }
+        .asReversed()
+    println(appleDevices)
+
+
+
+
+---EXEPTIONS---
+//Try Catch
+
+try{
+
+   //codigo blabla
+
+}catch(exception:NullPointerException){ //or another Exception
+
+   println("ha habido un error")
+
+}finally{
+
+	//el finally se usa para poner otro mensaje o una logica
+}
+
+
+val result: Int = try{4/0}catch(exception:Exception){0} //esta operacion da un error por dividir 0 
+						       // pero si falla el resultado sera 0 
+
+
+//throw
+trow NullPoinerException("mensajito") //lanzar un error
+
+
+
+//ELVIS OPERATOR ?:  
+
+si algo es nulo devuelve lo que le pongas y salvarte de un error
+
+var nombre: String? = null
+val lengthName: int= nombre?.length?:0 // si es nulo devuelve 0  
+

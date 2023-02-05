@@ -1,0 +1,198 @@
+----------MONGO CRUD---------
+
+//CREATE Methods
+
+db.collection.insertOne({json doc}) 
+db.collection.insertMany([{json doc1},{json doc2},{json dooc3}])
+
+
+
+//READ Methods
+
+db.collection.find({"key":"content"}) 
+db.collection.find({"key.n":"content"})//si la llave es un array buscara
+					los documentos donde el contenido
+					este en la posicion n
+
+.pretty() //method to vitualize results better
+
+//READ projections
+db.collection.find(query, projection)
+
+example: db.usuarios.find({edad:{$gt:18}}, //query
+			  {nombre: 1, edad: 1} //projection
+			).limit(5) // only the first 5 documents
+
+.limit(n) //nos traera los primeros n resultados
+.skip(n) //saltara los primeros n resultados
+
+example: db.usuarios.find({blabla}).skip(10).limit(5) //nos mostrara los resultados del 10 a 15
+	
+
+//UPDATE Methods
+
+db.collection.updateOne(filter, update, options) 
+example: db.movie.updateOne(
+		{title: "Pulp Fiction"}, //filter
+		{$set:{year:1995}} 	//update operator
+		)
+
+
+db.collection.updateMany(filter, update, options) 
+example: db.movie.updateOne(
+		{title: "Pulp Fiction"}, //filter
+		{$set:{year:1995}} 	//update operator
+		)
+
+
+db.collection.replaceOne(filter, replace, options) 
+example: db.movie.replaceOne(
+		{title: "Pulp Fiction"}, //filter
+		{title:"Pulp Fiction",  //replace document
+		 director:"Steven Spilberg",
+		 year:1987} 	     
+		)
+
+
+//update operators
+$set:{year:00}//update specific field
+$unset:{year:00} //deletes specific field
+$rename:{newName:oldName} 
+$max:{num:10} //solo actualiza el campo si el valor especificado es mayor 
+	        al valor existente
+$min:{num:10} 
+$inc:{num:3} //increment, numero incrementa en 3, para decrementar
+	    //usar numeros negativos
+ 
+
+//array update operators
+$addToSet:{arrayName:content} //solo añade al array si no existe ya dentro
+$push:{arrayName:content} //añade elemento al vector
+$pop:{arrayName:-1/1} //elimina el primero(-1) p el ultimo(1) elemento del vector
+$pull:{arrayName:content} //elimina todos los elementos del vector que coincidan 
+			 //elemento especificado
+$pullAll:{arrayName:[content, content]} //como el anterior pero con mas elementos que
+				       //poder eliminar
+
+
+//array Modifiers
+
+//$each la accion del operador afecta a varios elementos
+$arrayOperador:{arrayName:{					   
+		     $each: [{{note:1},{note:5},{note:10}}] 
+							   }}
+
+
+//$position modifica el operador para especificar la pposicion en el vector			  
+$arrayOperador:{arrayName:{					   
+		     $each: [content],
+		     $position:<number of pisition>}}}  
+
+//UPSERTS es como update pero hay posibilidad de insert
+
+db.movie.updateOne(
+		{title: "Pulp Fiction"}, //filter
+		{$set:{year:1995}},	//update
+		{upsert:true} 	       // si el doc existe lo actualiza, si no , lo crea 
+		)	                 	
+	
+
+//DELETE Methods
+ 
+db.collection.deleteOne({key:content})
+db.collection.deleteMany({key:content})
+
+
+
+------OPERADORES DE CONSULTA---------
+
+//Operadores relacionales
+
+=  $eq  
+<> $ne  **not equal to
+>  $gt  
+>= $gte 
+<  $lt  
+<= $lte
+
+
+//Operadores de pertenencia a conjuntos
+
+in	$in
+not in  $nin
+{ field: { $in: [value1, value2, ... valueN ] } }
+
+
+//Operadores de elementos
+
+{field:null} //devuelve campos que no existen o existen pero son null
+
+$exist 
+{ field: { $exists: boolean } } //devolvera los campos donde existe el campo
+
+$type
+{ field: { $type: BSON type } }
+
+___BSON types___
+ - double = Double
+ - int    = 32-bit integer
+ - long   = 64-bit integer
+ - string = String
+
+
+
+//Operadores logicos
+$and 
+$nor **devuelve los documentos que no cumplen las condiciones
+$or
+$not **({field:{$not:content}}) 
+example:  find({$operadorLogico:[{key:content},{key:content}]})
+
+
+//Operadores Array
+
+$all //devuelve los documentos cuyo vector contiene los valores
+example:  { campo: {$all: [valor1, valor2, ...] } }
+
+$size //devuelve los documentos que contienen el campo vector con el tamaño indicado
+{campo:{$size:2}} //No accepta rangos de valores osea $gt $lt ...
+
+$elemMatch //Solo Documentos que contienen un vector que coincide con todas las condiciones 
+{ campo: { $elemMatch: { selector1 , selector2 , ... } } }
+
+
+//Operadores de evaluacion
+
+$regex //es como el like de sql
+example: {campo:{$regex: pattern in regular expretion}}
+
+$text //performs text search
+
+
+
+//AGGREGATIONS
+
+
+//pipeline de agregaciones es un array de varios procesos por etapas
+db.collection.aggregate([
+	{$match:{bla:bla}},
+	{$group:{bla:bla}}
+
+])
+
+
+//Map-Reduce , puedes definir funciones de javaScript haciendo mas complejas las querys
+db.orders.mapReduce(
+	function() {emit(this.cust_id, this.amount);}, //funcion map
+	function(key, value) {return Array.sum(values)}, //funcion reduce
+	{
+	  query:{status:"A"}, //query 
+	  out:"order_totals"  //output
+	}
+)
+
+
+//Agregaciones de unico proposito
+db.collection.count()		        //cuenta el total de documentos
+db.collection.estimatedDocumentCount() //en caso de muchos documentos es mejor esta opcion ya que es mas rapida
+db.collection.distinct()	      //es un distinct tusabe

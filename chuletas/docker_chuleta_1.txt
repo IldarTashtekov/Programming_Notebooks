@@ -1,0 +1,219 @@
+
+//////////////// C O N T E N E D O R E S ///////////////////////
+
+-----ESTADO DE DOCKER COMANDS-----
+
+docker run hello-world  || corre un nuevo contenedor hello world
+docker run hello-world  --name hello-planet || le asignamos otro nombre al contenedor
+docker rename hello-planet hola-planeta ||cambio el nombre de hello-platzi a hola-platzi
+
+docker ps  || mira los contenedores activos
+docker ps -a || a es all, los mira todos, incluso los no activos
+
+docker inspect ddb614c6bbd1 (container id )|| muestra el json con la data del contenedor
+docker inspect contname (container name)
+
+docker rm <id o nombre del container> | borramos el contenedor
+docker container prune || elimina todos los contenedores que no se usan 
+
+
+
+-------EL MODO INTERACTIVO------
+docker run ubuntu || corre un ubuntu pero lo deja apagado
+docker run -it ubuntu || activa el modo interactivo asi que ahora entras en ubuntu 
+winpty run -it ubuntu || en windows a veces nesesitas hacer esto pa que funcione
+/#exit || sales de ubuntu
+
+
+
+----CICLO DE VIDA DE UN CONTENEDOR-----
+docker exec -it <nombre contenedor> bash || te conectas a un contenedor que este corriendo
+
+docker inspect --format'{{.State.Pid}}' alwaysup  || te da el process id
+
+Kill <state.pid> || apaga contenedor en linux
+docker stop <nombre contenedor>  || apaga acontenedor no linux
+
+
+
+----EXPONIENDO CONTENEDORES----
+docker run -d --name proxy nginx || nos descaramos ngnix con alias proxy, -d significa que corre por detras
+docker rm -f <contenedor> || apaga y borra el contenedor
+docker run --name proxy -d -p 8080:80 ngnix  || conecta el puerto 80 de ngnix con el 8080 de tu compu, -p es publish
+docker run --rm -d contenedor | --rm al acabar la conexion elimina el contenedor
+ 
+docker logs <contenedor> || logs del contenedor
+docker logs -f <contenedor> || -f de follow, sigues los logs
+docker logs --tail 10 <contenedor> || me da las ultimas 10 filas de la salida de logs
+
+
+
+
+////////////////D A T O S    E N    D O C K E R/////////////////////////
+
+
+----BIND MOUNTS----
+
+docker run -d --name db -v /c/Users/34695/Desktop/dockerdata/mongodata:/data/db mongo || corres mongo as db, conectas tu path:db de mongo en el ubuntu de docker
+
+docker run -d --name db -v ${pwd}:/data/db mongo
+
+
+----VOLUMENES-------
+
+docker volumes ls | revisa los volumenes que existen en docker 
+
+docker volume create <name> | crea volumen
+
+docker run -d --name db --mount src=<volume name>, dist=/data/db mongo | conecta la data de mongo con un volumen
+
+
+----INSERTAR Y EXTRAER ARCHIVOS DE UN CONTENEDOR----
+
+docker run -d --name copytest ubuntu tail -f /dev/null | corremos un ubuntu
+
+docker run -d -it ubuntu | a mi me sirvio este para correr ubuntu
+
+docker cp file.txt copytest:/testing/file.txt  | copiamos el archivo file.txt en el contenedor copytest en la carpeta /testing
+
+
+
+/////////I M A G E N E S//////////
+
+docker image ls | muestra las imagenes que tengo disponibles 
+docker pull <image name>:<version> | baja una imagen con una version especifica
+
+----CONSTUYENDO IMAGEN PROPIA-----
+
+touch Dockerfile |creo un Dockerfile
+##Contenido del Dockerfile##
+FROM ubuntu:latest            (aqui dice que construye sobre la imagen de ubuntu)
+RUN touch /ust/src/hola-platzi.txt (comando a ejecutar en tiempo de build)
+##fin
+
+docker build -t ubuntu:my_version . | construyo mi imagen con el directorio . ,ese directorio posee un archivo Dockerfile que sera usado para crear la imagen con sus especificaciones
+
+docker run -it ubuntu:my_version |corro mi contenedor
+
+
+---PUBLICAR MI IMAGEN EN DOCKERHUB---
+
+docker login |me logeo en docker hub
+docker tag ubuntu:my_version misusuario/ubuntu:my_version 
+docker push misusuario/ubuntu:my_version
+
+
+----SISTEMA DE CAPAS----
+docker history imagen:version | veo la indo de como se contruyo cada capa
+
+dive imagen:version | veo la info de la imagen con el programa dive que tendre que descargar a parte
+
+
+//////// D E S A R O L L O    E N   D O C K E R ///////
+
+docker network create --attachable <netname> | creamos una red de docker, --attachable hace que pueda conectar distintos contenedores a la red
+docker network inspect <netname> |inspecciona mi red de docker
+
+docker network connect <netname> <container> |conectamos red y contenedor
+
+
+---conectar varios contenedores
+
+docker network --create --attachable my net | creamos net
+
+docker network run -d --name db mongo | corremos contenedor mongo 
+
+docker network connect mynet db  | coenctamos mynet y mongo
+
+docker run -d --name app -p 3000:3000 -env MONGO_URL=mongodb://db:27017/test my_app 
+	|corremos my app que tiene un db de mongo, en el localhost:3000, pasando mongo como env hacia la variable MONGO_URL
+	|no funcionara ya que app no esta en la net
+	| HostPort:DockerPort
+
+docker network connect mynet app | al conectar app con mongo en la net , si entras en localhost:3000 todo funciona
+
+
+
+///////D O C K E R    C O M P O S E/////////
+
+------DOCKER COMPSOE BASICO---------
+
+docker-compose up  | activa el docker compose de la app , importante estar en la carpeta donde esta el documento docker compose
+
+docker-compose up -d | activa la app por detras para que puedas seguir usando la terminal
+
+  
+------SUBCOMANDOS DOCKER COMPSOE-------
+
+docker-compose ps  | muestra los docker compose
+
+docker-compose exec <service name> <command> | ejecutamos un comando en docker compose
+
+docker-compose down | eliminamos el docker compose
+
+docker-compose logs | vemos todos los logs de docker compose
+
+docker-compose logs <service name> | vemos los dockers compose de un servicio en concreto
+
+docker-compose logs -f <service name>| hacemos seguimiento de los logs
+
+-----HACER DESPLIEGUE DE COKER COMPOSE-----
+al principio el yaml se ve como asi, de esa manera hace el despliegue de una iamgen que tengas en el docker
+######
+services:
+  app:
+    image: my_app
+######
+
+si haces esto, lo que sucede es que hace build del cokerfile que tengas en la carpeta, este caso en la carpeta .
+######
+services:
+  app:
+    build: .
+######
+
+para ejecutarlo tienes que poner:$ docker-compose build
+
+
+######
+version: "3.8"
+
+services:
+  app:
+	# crea una imagen con los ficheros del directorio actual.
+    build: .
+    environment:
+      MONGO_URL: "mongodb://db:27017/test"
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+	# Sección para definir los bindmount.
+    volumes: 
+			#<local path>:<container path> # el directorio "<.>" actual   se montará en "/usr/src" en el contenedor.
+      - .:/usr/src
+			# indica que ficheros debe ignorar
+      - /usr/src/node_modules
+	# Permite pasarle un comando a ejecutar al servicio app.
+	# en este caso 
+    command: npx nodemon  index.js
+
+  db:
+    image: mongo
+
+######
+
+
+////// D O C K E R    A V A N Z A D O /////
+
+------USO DE MEMEORIA------
+docker container prune  | borra todos los contenedores inactivos 
+docker system prune  | borra todas las imagnes, networks y cotnenedores no usados
+docker run --memory 1g app  | limita el uso de memoria
+docker stats  | veo los recursos que consume docker en mi sistema
+
+
+
+
+
+

@@ -1,0 +1,219 @@
+Las tres escuelas de la estadistica
+
+----Estadistica Descriptiva----
+
+
+----Probabilidad----
+
+
+----Inferencial----
+
+
+
+------------------Conceptos--------------------
+
+
+---Media Mediana Moda---
+
+Moda : es el dato mas comun, no aplica a datos numericos continuos
+       solo a discretos
+Media: es el promedio sum(xi·fi)/N, es sisceptible a valores atipicos
+	por ejemplo cuando haciendo estadisticas de riqueza hay una persona
+	muy muy rica
+Mediana: el dato central
+	-si es impar = (N+1)/2
+	-si es par= (x[N/2]+x[N/2+1])/2 *el conjunto tiene que estar ordenado
+
+
+---Muestra y Poblacion---
+
+Poblacion: Colegio publico
+Individuo: Un/a estudiante
+Muestra: estudiantes mujeres
+
+Poblacion: Zoologico
+Individuo: un animal 
+Muestra: felinos que hay en el zoo
+
+---Caracteres estadisticos 
+propiedad considerada para cada uno de los individuos
+al realizar un estudio estadistico
+Hay dos tipos:
+	-Cuantitativas: cuando son cuantitativas son llamadas variables y son numericas
+		-Discretas: numeros integros. ej:dos personas
+		-Continuas: con decimales. ej: 1.85cm 
+
+	-Cualitativas: caracteres que representan una cualidad
+		-Ordinales: hay una jerarquia. ej:clases sociales, jerarquia empresarial
+		-Nominales: no hay una jerarquia. ej: colores, sexos, edades
+
+
+----Tabla de datos simples----
+Construccion de una tabla de datos simple:
+-1a Columna: xi, las muestras  estadisticas
+
+-2a Columna: fi, frecuencia absoluta, las veces que aparece
+	     la muestra en cuestion, la suma de todas las fi se
+	     simboliza con N.
+
+-3a Columna: Fi, frecuencia absoluta acomulada, la acomulacion 
+	     las frecuencias absolutas, sumando la actual con
+	     las anteriores 
+
+-4a Columna: hi, frecuencia relativa, fi/N, representa un porcentje
+ 
+-5a Columna: Hi, frecuencia relativa acomulada, es lo que la Fi a la fi
+	     se hace sumando la actual con las anteriores
+
+
+-----Tabla de datos agrupados en intervalos----
+
+se usan cuando:
+	1.Cuando tenemos una variable estadistica continua
+	2.Cuando existen pocas repeticionesen los datos
+
+En esos casos resulta conveniente usar estas tablas porque aunque se pierda precision
+se gana en comprension
+
+Consideraremos intervalos de la forma [a,b)
+Cada uno de estos intervalos se identifica por su marca de clase del intervalo, 
+que es xi=(a+b)/2
+
+Construccion de una tabla en intervalos:
+-1a Columna: intervalos
+-2a Columna: marcas de clase correspondiente a los intervalos
+-3a Columna: frecuencias absolutas fi
+-4a Columna: tambien podemos incluir nuevas columnas para las frecuencias
+	     absolutas acomuladas Fi y para las frecuencias relativas hi
+
+-------Graficos Estadisticos--------
+
+
+-Diagramas de barras(tabla datos simple)
+	eje vertical: fi o Fi(depende de si la tabla es fi o Fi)
+ 	eje horrizonntal: xi
+
+-Diagramas de rectangulos(tabla de frecuancias)
+	eje vertical: fi o Fi(depende de si la tabla es fi o Fi)
+	eje horrizonntal: xi
+
+-Diagrama de sectores(tabla frecuencuas)
+	*Formula del angulo: hi*360º=angulo
+	*comprobacion, sumar todos los angulos de cada intervalo da 360º
+
+	es el tipico diagrama de la pizza, cada trozo en un intervalo 
+	y mide lo corresponBdiente  
+
+ --------Parametros de dispersion------
+Los parametros de dispercion miden como de separados estan los datos
+
+-Rango recorrido Rango: el dato mayor menos el dato menor
+
+-Rango intercuantil(IQR) abarca desde el 1r cuartil y el 3r cuartil
+
+-Desviacion media:Media de las distancias de los datos a la media
+		 DM=(sum(xi-media(x))*fi)/N
+
+-Varianza: como de separados estan los datos respecto la media
+	   VAR=sum(xi^2*fi)/N-med^2
+
+-Desviacion estandar/tipica DT o std= raiz Cuadrada(VAR)   //el simbolo suele ser una especie de o
+
+-Coeficiente de variacion=Sirve para comparar las disperciones entre
+		 	   las diversas variables. CV=DT/media(x)
+
+-Datos normales de la distribucion normal
+limite min: Q1-1.5IQR
+limite max: Q3+1.5IQR
+los datos que se propasen de estos limites son llamados datos anomalos o outliers
+
+
+
+--------Parametros de posicion----------
+Los parametros de posicion son la mediana, los cuartiles, los deciles y los percentiles
+
+-Cuartiles: Dividimos los datos en cuatro partes
+	·Q1 Es el dato que deka por debajo de el 1/4 parte de los datos Q1=N/4
+	·Q2 es el dato que deja por debajo de el 1/2 parte de los datos(mediana) Q1=N/2
+	·Q3 es el dato que deja por debajo de el las 3/4 partes de los datos Q3=3N/4
+
+      **Para obtener un cuartil, buscamos si el valor correspondiente aparece en la columna de las Fi
+	Si no aparece, el cuartil correspondiente es el primer dato cuya Fi supera a dicho valor
+	Si este valor aparece como una Fi, el cuartil seria la semisuma del dato correspondiente y el
+	siguiente dato, eso es sumamos estos datos y los dividimos entre 2
+
+
+
+-Deciles: Dividimos los datos en 10 partes D1,D2,D3,D4,D5...
+	Dk Dato que deja por debajo de las las k/10 partes de los datos(lo mismo que los cuartiles vamos)
+	Dk=k*N/10
+
+      **Buscamos el valor correspondiente anterior aparece en la columna de las frecuencias absolutas acomuladas
+	Si no aparece, Dk es el primer dato cuya frecuencia absoluta acomulada supera dicho valor
+	Si este valor aparece como una Fi Dk seria la semisuma del dato correspondiente y el siguiente dato, eso es,
+	summos estos dos datos y los dividimos entre 2.
+	
+-Percentiles: Dividimos los datos en 10 partes P1, P2...P99
+	Pk=kN/100
+	
+	El mismo texto con asterisco que antes
+
+
+-----Parametros para datos agrupados en intervalos----
+	---Primero buscamos ciertos parametros
+
+	Intervalo modal: el intervalo con mas fi
+
+	Intervalo mediana: es el intervalo que deja tras de si la mitad de los datos
+			   N/2=mediana
+
+	Intervalo tercer cuartil = 3N/2
+
+	Intervalo percentil 85 = 85N/100
+	
+
+	---Luego buscamos la media y los parametros de dispercion
+		
+	media= sum(xi·fi)/N
+	VAR=sum(xi^2·fi)/N
+	DM=sum((xi-media)·fi)/N
+	DT=raizCuadrada(VAR)
+	CV=DT/media
+	
+
+
+//REPASA ESCALAMIENTO, ES DIFICIL DENTENDER
+------Escalamiento lineal o normalizacion------//con datos numericos y ordenador de forma gaussiana o uniforme
+
+escalamiento min max:
+	cada dato que tenga lo tengo que transformar en un valor normalizado xs(scaled value)
+	xs=(2x-min-max)/max-min
+
+escalamiento clipping (no recomendado):
+	colapsar todos los datos outliers en los limites minimos y maximos
+
+
+-----Transformacion no lienal--------//con datos muy sesgados y no simetricos
+--investiga por tu cuenta
+	-tangente hipervolica
+	-sigmoide
+y=raiz2(x)
+
+
+
+
+
+------Correlaciones-------
+correlacion tiene que ver con medir una variable con otra digamos x & y
+
+//la covarianza es la varianza conjutna de las dos variables
+covarianza cov= sum( (xi-media(x))(yi-media(y)) ) /N-1 
+
+//coeficiente de correlacion, si es alto significa que estan muy relaiconados y bajos menos
+   estan altos si estan cerca del 1 y bajos si cerca del 0, si se accercan a -1 significa que
+  tienen correlacion inversa
+
+p=cov/(std(x)·std(y))
+
+
+	

@@ -1,0 +1,160 @@
+
+--COMANDOS BASICOS DE GIT--
+git config -l (muestra informacion sobre tu repositorio)
+git config --global user.email "noseque@email.com"
+git config --global user.name  "un numbre tusabe"
+git init (!!hazlo en la carpeta en la que quieras hacer el repositorio!!)
+git status (show the status of you git project)
+
+git add "blabla.py" (añades los cambios o el archivo al repositorio)
+git commit -m "mensaje blabla" ( guarda una instantánea del estado de un proyecto 
+				(en cuanto a directorios y ficheros)en un momento determinado)
+//add es meter el codigo a una especie de limbo(memoria ram) y hasta que pulses commit 
+//cada commit es un cambio que se guarda en el repositorio
+// add commit es el ciclo basico de git
+
+git rm blabla.py (eliminas el archivo del repositorio)
+git show blabla.txt (muestra cambios de un archivo)
+git diff 123124334(numero del commit)2324  otroCommit(compara dos versiones de git)
+git log (muestra los distintos logs con sus numeros commit)
+git log --all --graph --decorate --oneline (muestra el historial de logs con
+					     lineas que grafican las ramas,
+					     tambien muestra tags de cada commit)
+//tags
+git show-ref --tags (muestra el tag de un commit)
+git tag -a v0.1 -m"mensajito" unnumerodeltag (agregas un tag)
+git tag -d nombretag (eliminas un tag)
+git push origin :refs/tags/nombre-del-tag (eliminas el tag en github tambien)
+
+//un branc(rama) , permite crear ramas de development para experimentar
+//y rama de bugfixing(tambien llamada hotfix) donde arreglas bugs, y cuando quieras
+//fusionar la rama experimental con la rama master(la rama principal) haces un
+//proceso llamado merge
+
+git branch nombreRama  (creas nueva rama)
+checkout nombreRama (te mueves entre ramas)
+git merge ramaQueFusionaras -m "mensaje" (fusionas dos ramas)
+git branch nombrerama -D (eliminar rama)
+
+//cuando hay dos ramas con versiones que son infusionables porque 
+//hay dos lineas ocupan el mismo sitio, en esos casos hacer un merge 
+//da error, para arreglarlo hay que poner lo siguiente
+//para arreglarlo hay que hacerlo medio a mano puta vida
+
+
+//volver en el tiempo 
+git reset commitNum  --soft(vuelve a la version sin eliminar la actual)
+		     --hard(vuelve a la anterior eliminando todo, es peligroso)
+
+
+git checkout coomitNum (fichero o directorio)  (vuelves a una version anterior)
+(si luego haces git add, gir commit guardas la version a la que hiciste check)
+
+git rm (elimina file sin eliminar el historial de versiones)
+git rm --cached (elimina los archivos del area de staging y del proximo comit)
+       --force ( Elimina los archivos de Git y del disco duro. Git siempre guarda todo, 
+                 por lo que podemos acceder al registro de la existencia de los archivos,
+                 de modo que podremos recuperarlos si es necesario (pero debemos 
+                 usar comandos más avanzados).
+
+----GITHUB Y GIT REMOTO----
+git push (despues del add y commit envias todo a repositorio remot)
+git fetch (trae cosas del rep. remoto al local)
+git merge (copia la actualizacion remota del fetch con la local)
+git pull (fetch y merge a la vez loco, mas guay)
+
+
+git commit -a (solo si el file ya pasado por el add, commit y add a la vez)
+
+
+git remote add origin enlacegithub (enlazas un repositorio github con tu rep. local)
+git remote (te dice tus rep. remotos)
+git remote -v (te muestra que funciones tienes en tus rep. remotos)
+git push rep.remoto rep.local (ej: git push origin master)(hace push al remoto)
+git pull origin main --allow--unrelated--histories (fusiona ambos repositorios)
+--SSH
+ssh-keygen -t rsa -b 4096 -C "username@gmail.com" (1r paso generar llave ssh en local)
+eval $(ssh-agent -s) (2o paso evaluar si la llave funciona)
+ssh-add ~/.ssh/id_rsa (3r paso añadir llave ssh)
+
+//pull request
+git branch fix-out (1r paso creas branch de arreglar)
+git checkout fix-out (2o paso te pasas a la rama fixoout)
+git push origin fixout (3r paso enviar branch a rep. remoto)
+//4o paso se hace pull request por pagina web de github 
+//5o paso, aprovar pull request o no en pagina web github
+
+//fork, creas un clon de un proyecto y desarollas por tu cuenta
+git clone urlRepositorioGithubPublico (te descargas el clon a local)
+//luego se hace un pull request por si acceptan tu contribucion
+
+.gitignore (!!!SEGURIDAD!!!, es un documento en el que pones los
+	     archivos que no quieras que se compartan en tu github)
+
+README.md (!!BUENA PRACTICA!! en un editor de md(hay muchos online gratis)
+	    haz un texto que explique un poco el proyecto)
+
+
+--Commandos colaborativos--
+
+git shortlog -sn = muestra cuantos commit han hecho cada miembros del equipo.
+git shortlog -sn --all = muestra cuantos commit han hecho cada miembros del equipo hasta los que han sido eliminado
+git shortlog -sn --all --no-merge = muestra cuantos commit han hecho cada miembros quitando los eliminados sin los merges
+git blame ARCHIVO = muestra quien hizo cada cosa linea por linea
+git COMANDO --help = muestra como funciona el comando.
+git blame ARCHIVO -Llinea_inicial,linea_final= muestra quien hizo cada cosa linea por linea indicándole desde que linea ver ejemplo -L35,50
+**git branch -r **= se muestran todas las ramas remotas
+git branch -a = se muestran todas las ramas tanto locales como remotas
+
+
+
+---COMMANDOS AVANZADOS---
+
+//rebase, arreglar una rama fusionandola con otra
+git checkout bugfix (1r paso: cambiamos a la rama de la que queremos traer los cambios)
+git rebase master (2o paso: pegamos la rama experimental a la master)
+
+
+//git stash, guardar cambios en memoria y recuperarlos despues
+git stash (guardas el stash)
+git stash list (muestra los stashes que hay)
+git stash pop (abres el stash mas reciente)
+git stash drop (elimina el stash mas reciente)
+
+git clean (elimina cosos)
+git clean --dry--run (simula lo que se elimina bueno para comprovar que se eliminaria)
+
+//cherry-pick traer commits viejos a un branch
+(1r paso)a - b - c - d   Master
+                 \
+	  e - f - g Feature
+
+(2o paso) git checkout master
+
+(3r paso) git cherry-pick f
+
+(resultado) a - b - c - d - f   Master
+	            \
+	             e - f - g Feature
+
+
+---COMMANDOS DE EMERGENCIAS----
+
+//amend, reconstruir git
+git commit --amend -m"texto" (devuelve la version anterior a la actual
+			      ,en caso de que hayas errado ela ctual)
+ 
+//reset y reflog en caso de Emergencia, ultimo recurso cuidado
+git reflog (muestra hashes del head)
+git reset --soft hash (te mantiende lo que tengas en staging)
+	  --hard hash (resetea absolutamente todo incluso el staging )
+
+
+--MISCELANEA--
+
+//buscar con grep y log
+
+git grep -c palabra (cuenta las veces que sale una palabra)
+git log -S palabra (muestra las veces que sale un commit)
+
+

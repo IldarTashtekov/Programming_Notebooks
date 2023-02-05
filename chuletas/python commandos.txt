@@ -1,0 +1,64 @@
+
+** potencia
+//division de ints sin resto
+variable=input()  es como un scanner de String
+
+---TRANSFORMAR STRING TO INT y vicebersa-------
+variableString='5'
+variableString=int(variableString) #transformas en int
+
+----------RANDOM--------
+import random 
+numerorandom = random.randint(1, 100)
+
+
+------STRINGS-------
+str(variable) #transforma variable a String
+variable.upper() # to Upper Case and Lower case
+variable.lower 
+variable.capitalize() #first char Upper case
+variable.strip #delete spaces
+variable.replace('o', 'a')
+variable[0] #return postion os String, in that case the first char
+len(variable) #String length 
+variable[0:3] # slices parts of Strings
+variable[::-1] #inverse 
+
+----ESTRUCTURAS DE DATOS PYHTON--------
+------Lists-------
+listaSape=[1,2,'b',4.5,True,'quetal']
+listaSape.append(False) #add new index to list
+listaSape.pop(position) #delete index in position
+listaSape[::-1] #you can use slices in lists
+
+
+------Tuplas-------
+miTupla=(1,2,3,4)#they are static objects you cant add or delete new elements
+
+-----Dictionary----
+my_diccionario{'llave1':1,
+	      'llave2':2,
+	      'llave3':3, 
+	      }
+
+print(my_diccionario['llave1'])#how print position on dictionary
+
+my_diccionario.keys()
+my_diccionario.values() #muestra valores
+my_diccionario.items() #muestra llave y valores
+
+
+------AFIRMACION----
+assert (investiga asserts)
+
+
+
+-----Virtual Enviroment----
+1r paso: py(windows)/python3(linux) -m venv venv /generas carpeta entorno virtual
+
+2o paso: source venv/bin/activate(para linux o mac) /activas entorno
+	 .\venv\Scripts\activate (para windows) 
+
+3r paso: alias avenv /creas alias para activar entorno
+	avenv = activate
+	deactivate=deactivatexd
