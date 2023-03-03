@@ -157,7 +157,7 @@ docker-compose logs <service name> | vemos los dockers compose de un servicio en
 
 docker-compose logs -f <service name>| hacemos seguimiento de los logs
 
------HACER DESPLIEGUE DE COKER COMPOSE-----
+-----HACER DESPLIEGUE DE DOKER COMPOSE-----
 al principio el yaml se ve como asi, de esa manera hace el despliegue de una iamgen que tengas en el docker
 ######
 services:

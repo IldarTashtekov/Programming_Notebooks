@@ -13,7 +13,7 @@ face_recognizer = cv.face.LBPHFaceRecognizer_create()
 face_recognizer.read('face_trained.yml')
 
 #test image
-img = cv.imread('src/yo_twink.jpg')
+img = cv.imread('src/foto.jpg')
 img=cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
 

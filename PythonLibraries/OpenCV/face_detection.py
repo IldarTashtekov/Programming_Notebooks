@@ -2,7 +2,7 @@ import cv2 as cv
 from read_video_img import rescale_frame
 
 
-img = cv.imread('src/yo_twink.jpg')
+img = cv.imread('src/foto.jpg')
 img = rescale_frame(img, scale=1.1)
 
 g_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)

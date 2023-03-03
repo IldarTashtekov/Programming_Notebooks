@@ -1,0 +1,264 @@
+
+///////// C O N F I G ////////////
+kubectl --config (you can change the configuration file)
+
+kubectl --server --user (you change a specific part of the configuration)
+
+kubectl config get-context (get context of config)
+
+kubectl get ns (get namespaces)
+
+
+
+/////////// N O D E S ////////////
+
+kubectl get nodes    (show a table with information about nodes i have)
+
+kubectl get nodes -a wide		(show extra data from the nodes)
+
+sudo kubectl get nodes -o yaml   (the nodes data is showed in yaml format)
+
+kubectl describe nodes node1 (describe information about one node in specific)
+
+kubectl explain node  (explanation of the different parts that compose a node)
+
+
+
+/////////// P O D S /////////// 
+
+kubectl get pods (return all pods)
+
+kubectl get pods –all-namespaces (return all pods including internal kubernetes pods)
+
+kubectl apply -f nginx-pod.yaml (apply pod manifest)
+
+===MINIMAL POD MANIFEST EXAMPLE===
+apiVersion: v1
+kind: Pod
+metadata:
+   name: nginx
+spec:
+  containers:
+      -name: nginx
+	image: nginx:alpine
+==================================
+
+kubectl exec -it nginx -- sh (runs pod)
+
+kubectl delete pod nginx (delete pod)
+
+===COMPLEX POD MANIFEST EXAMPLE===
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    env:
+    - name: MI_VARIABLE
+      value: "pelado"
+    - name: MI_OTRA_VARIABLE
+      value: "pelade"
+    - name: DD_AGENT_HOST
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "200m"
+      limits: (if pod exeds the limits, linux kernel will turn off the pod and then will restart-it)
+        memory: "128Mi"
+        cpu: "500m"
+    readinessProbe: (readinessProbe is a way to explain to kubernetes that you pod is ready to recieve traffic)
+      httpGet: (makes a http get to check if pod is working)
+        path: /
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe: (livenessProbe:  is a way to explain to kubernetes that you pod is alive)
+      tcpSocket: 
+        port: 80
+      initialDelaySeconds: 15
+      periodSeconds: 20
+    ports:
+    - containerPort: 80 (we gonna use the port 80)
+==================================
+
+
+
+/////////// D E P L O Y M E N T /////////// 
+
+kubectl create deployment NAME --image=image  (run a pod, in that case the pod conf is inside a yaml file)
+
+kubectl logs deploy/imagename (muestra los logs del pod)
+
+kubectl logs deploy/imagename –tail 20 -f (muestra los ultimos 20 logs  del pod, -f es follow)
+
+kubectl create deployment <nombre> --image=<imagen> (runs deployment )
+
+kubectl get secrets -n kube-public  (where the bootstrapping of the cluster is done)
+
+kubectl apply -f deployment.yaml
+
+kubectl delete -f deployment_name (elimina el deployment)
+
+===DEPLOYMENT MANIFEST EXAMPLE===
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        env:
+        - name: MI_VARIABLE
+          value: "pelado"
+        - name: MI_OTRA_VARIABLE
+          value: "pelade"
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "200m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        ports:
+        - containerPort: 80
+======================================
+
+(DeamonSet is like an Deploy but deploy but without replicas and deploying every pod in distinct nodes, noramlly they are used in monitoring)
+==== DEAMONSET MANIFEST EXAMPLE ======
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        env:
+        - name: MI_VARIABLE
+          value: "pelado"
+        - name: MI_OTRA_VARIABLE
+          value: "pelade"
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "200m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        ports:
+        - containerPort: 80
+============================================
+
+
+
+/////// S T A T E F U L S E T S  &  V  O  L  U M E S ///////
+
+kubectl get sts my_stateful_set (gets the statefuls ets)
+kubectl get pvc (get pvc's) **a pvc: persistent volume claim, is a clain of volume from cloud provider to kubernetes**
+
+===STATEFULSET MANIFEST EXAMPLE====
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-csi-app-set
+spec:
+  selector:
+    matchLabels:
+      app: mypod
+  serviceName: "my-frontend"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mypod
+    spec:
+      containers:
+      - name: my-frontend
+        image: busybox
+        args:
+        - sleep
+        - infinity
+        volumeMounts: (mount a volume in /data)
+        - mountPath: "/data"
+          name: csi-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: csi-pvc
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: do-block-storage (a strorage drive creates a volume from kubernetes to the cloud provider automaticly)
+==========================================
+
+
+/////// S E R V I C E   C L U S T E R   I P  ////////
+
+
+kubectl describe svc servicename (muestra info del servicio)
+
+
+
+
+///// S E R V I C E  L O A D   B A L A N C E R ///////
+
+
+
+
+//// I N G R E S S /////
