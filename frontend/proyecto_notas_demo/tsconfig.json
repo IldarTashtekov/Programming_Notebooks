@@ -1,0 +1,103 @@
+/*
+// Para la instalacion de type script. EL primer paso suele ser instalar nosejs y npm
+sudo apt update
+sudo apt install nodejs npm -y
+
+// Verificar instalación:
+node -v
+npm -v
+
+// Crear un proyecto
+mkdir mi-proyecto
+cd mi-proyecto
+npm init -y
+
+// Instalacion local de type script
+npm install typescript --save-dev
+
+// Inicializar configuración de TypeScript, eso genera el archivo tsconfig.json
+npx tsc --init
+
+// Compilar todo el proyecto
+npx tsc
+
+// Compilar automáticamente cuando guardas (modo watch)
+npx tsc --watch
+
+// Ejecutar el proyecto
+node archivo.js
+
+// Ejecutar mejor usando ts directamente. Se agrega ts-node para ejecutar .ts directamente
+// Instalar ts-node
+npm install ts-node @types/node --save-dev
+
+// Ejecutar directamente
+npx ts-node index.ts
+
+
+
+// Instalar webpack, despues de llamar a este comando, aparecen en package.json
+npm install --save-dev webpack webpack-cli ts-loader typescript -D
+
+// En la seccion de scripts de package.json configuramos para que webpack haa el build
+"build": "webpack"
+
+// Luego generar el script webpack.config.js
+// Despues de esto, configurar para que el archivo de salida sea bundle.js y hacer que index.html apunte a bundle.js
+// Posteriormente ejecuar el comando de compilacion
+npm run build
+
+// Para no tener que ejecutar este script cada vez que queremos hacer los cambios instalamos webpack-dev-server
+npm i webpack-dev-server -D
+
+// añadimos webpack-dev-server en la seccion de scripts de package.json
+"serve": "webpack-dev-server"
+
+// Ejecutamos el comando
+npm run serve
+
+
+*/
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./public/js",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "target": "ES6",          // ES6+ compatible con todos los navegadores modernos
+    "module": "ESNext",       // genera export/import nativos    "types": [],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    //"declaration": true,
+    //"declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+  }
+}
